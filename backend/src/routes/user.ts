@@ -22,6 +22,7 @@ userRouter.post('/signup', async(c) => {
 	
     try{
         const res = await c.req.json();
+        console.log(res);
         const {success} = signupInput.safeParse(res);
 
         if(!success) {
@@ -32,8 +33,21 @@ userRouter.post('/signup', async(c) => {
   
       const {email, password, name} = res;
 
+      const isUser = await prisma.user.findUnique({
+        where: {
+        email: email
+      }});
+      console.log("user:" ,isUser);
+
+      if(isUser){
+        return c.json({
+            message: 'Incorrect creds'
+        });
+      }
+
   
         const hashpwd = await bcrypt.hash(password, 10);
+        console.log(hashpwd)
   
         const user = await prisma.user.create({
           data:{
@@ -56,8 +70,9 @@ userRouter.post('/signup', async(c) => {
         })
 
         
-      }catch(e){
+      }catch(error){
         c.status(411);
+        console.log(error)
         return c.json({
             messsage: "Invalid"
         })
@@ -83,7 +98,8 @@ userRouter.post('/signin',  async(c) => {
     
         if(!success){
             return c.json({
-                message: "Enter valid input"
+              status: "false",
+              message: "Enter valid input"
             })
         }
     
@@ -94,6 +110,7 @@ userRouter.post('/signin',  async(c) => {
             where: {
             email: email
           }});
+          console.log(user);
     
           if(!user){
             return c.json({
@@ -119,18 +136,24 @@ userRouter.post('/signin',  async(c) => {
     
             if(!isPwdValid){
                 return c.json({
-                    message: "Invalid email or password"
+                  status: "false",
+                  message: "Invalid email or password"
                 })
             }
     
         }
     
         const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
-        return c.json({ jwt });
+        return c.json({ 
+          status: "ture",
+          jwt });
 
       }catch(e){
         c.status(411);
-        return c.text('Invalid');
+        return c.json({
+          status: "false",
+          message: "Invalid"
+        });
       }
 
 
