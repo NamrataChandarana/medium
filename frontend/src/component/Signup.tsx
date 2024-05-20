@@ -1,4 +1,3 @@
-
 import Quotes from "./Quotes"
 import Auth from "./Auth"
 import Input from "./Input"
@@ -8,6 +7,7 @@ import axios from 'axios'
 import { useNavigate } from "react-router-dom"
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BACKEND_URL } from "../config"
 export default function SignupComponent() {
 
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ export default function SignupComponent() {
     e.preventDefault();
     console.log(postInput);
     try{
-      const res = await axios.post('http://127.0.0.1:8787/api/v1/users/signup',{
+      const res = await axios.post(`${BACKEND_URL}/api/v1/users/signup`,{
         name: postInput.name,
         email: postInput.email,
         password: String(postInput.password),
@@ -48,7 +48,8 @@ export default function SignupComponent() {
       if(res.data.jwt){
         console.log("hello")
         const jwt = res.data.jwt;
-        localStorage.setItem("token", jwt);
+        const token = `Bearer ${jwt}`
+        localStorage.setItem("token", token);
         navigate('/');
         toast.success('Signup Successfully!', {
           position: "top-center",

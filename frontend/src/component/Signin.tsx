@@ -7,6 +7,7 @@ import axios from 'axios'
 import { useNavigate } from "react-router-dom"
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BACKEND_URL } from "../config"
 export default function SigninComponent() {
 
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function SigninComponent() {
       email: e.target.value,
     }))};
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPostInput(prev => ({
+    setPostInput((prev) => ({
       ...prev,
       password: e.target.value,
     }))};
@@ -29,7 +30,7 @@ export default function SigninComponent() {
   async function handleSubmit(e: any) {
     e.preventDefault();
     try{
-      const res = await axios.post('http://127.0.0.1:8787/api/v1/users/signin',{
+      const res = await axios.post(`${BACKEND_URL}/api/v1/users/signin`,{
         email: postInput.email,
         password: String(postInput.password),
       })
@@ -37,7 +38,8 @@ export default function SigninComponent() {
 
       if(res.data.jwt){
         const jwt = res.data.jwt;
-        localStorage.setItem("token", jwt);
+        const token = `Bearer ${jwt}`
+        localStorage.setItem("token", token);
         navigate('/');
         toast.success( "signup successfully", {
           position: "top-center",
@@ -49,7 +51,6 @@ export default function SigninComponent() {
           progress: undefined,
           theme: "light",
           });
-          return;
       }else{
         toast.error(res.data.message, {
           position: "top-center",

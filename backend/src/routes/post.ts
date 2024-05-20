@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { createPostInput, updatePostInput} from '@namratachandarana/medium-common'
+import { tuple } from "zod";
 
 export const postRouter = new Hono<{
     Bindings: {
@@ -38,7 +39,8 @@ postRouter.post('/blog', async(c) => {
             data:{
                 title: body.title,
                 content: body.content,
-                authorId: userId
+                authorId: userId,
+                published: body?.published ?? false
             }
         })
 
@@ -49,6 +51,7 @@ postRouter.post('/blog', async(c) => {
         }
 
       }catch(e){
+        console.log(e);
         return c.json({
             message: "Something went wrong"
         })
@@ -106,18 +109,32 @@ postRouter.get('/bulk', async(c) => {
     }).$extends(withAccelerate())
 
     try{
+        console.log("hello");
         const posts = await prisma.post.findMany({
+            // where:{
+            //     published: true
+            // },
             select:{
                 id:true,
                 title: true,
                 content: true,
+                author: {
+                   select:{
+                        name:true
+                   }
+                }
             }
-        })
+        });
+        console.log(posts);
+        
 
-        return c.json({
-            message: "Posts fetched!",
-            posts
-        })
+        if(posts){
+            return c.json({
+                message: "Posts fetched!",
+                posts
+            })
+        }
+       
     }catch(e){
         return c.json({
             message: "Something went wrong"
@@ -140,8 +157,14 @@ postRouter.get('/:id', async(c) => {
                 id: id
             },
             select:{
+                id: true,
                 title: true,
                 content: true,
+                author: {
+                    select: {
+                        name: true
+                    }
+                }
             }
         })
 

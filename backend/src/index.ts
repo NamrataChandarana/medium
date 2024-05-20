@@ -22,7 +22,7 @@ app.use(
   })
 )
 
-app.use("/api/v1/post/blog/*", authMiddleware );
+app.use("/api/v1/post/*", authMiddleware );
 app.route('/api/v1/users', userRouter);
 app.route('/api/v1/post', postRouter);
 
