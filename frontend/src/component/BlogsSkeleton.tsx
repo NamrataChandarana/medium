@@ -3,7 +3,7 @@ const Skeleton = () =>{
     return(
         <>
             <div className="flex place-content-center">
-                <div className=" mx-10 min-w-[38rem] max-w-[38rem]">
+                <div className="lg:min-w-[38rem] max-w-[38rem]">
                     <div className="flex flex-col space-y-2 p-6 border-b border-gray-200 ">
                         <div className="flex items-center space-x-1">
                             <div className="flex items-center justify-center h-15 mb-2 bg-gray-300 rounded-full dark:bg-gray-700">
