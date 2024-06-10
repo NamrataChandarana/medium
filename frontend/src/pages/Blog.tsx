@@ -1,73 +1,59 @@
 import axios from 'axios'
 import { useEffect, useState} from 'react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { BACKEND_URL } from "../config";
+import {  toast } from 'sonner'
 import { useParams } from 'react-router-dom';
 import {BlogComponent} from '../component/BlogComponent'
-import Appbar from '../component/Appbar';
 import { BlogSkeleton } from '../component/BlogSkeleton';
+import { useDispatch } from 'react-redux';
+import { postSuccess } from '../redux/reducer/postsSlice';
+import Appbar from '../component/Appbar';
 
-// interface Blog {
-//     id: string,
-
-// }
 const Blog = () =>{
-    const [post, setPost] = useState();
     const [loading, setLoading] = useState(true);
     const {id} = useParams();
+    const dispatch = useDispatch();
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
     
-    async function getBlog() {
+    async function getBlog(){
         try{
           const res = await axios.get(`${BACKEND_URL}/api/v1/post/${id}`,{
             headers: {
               Authorization: localStorage.getItem("token")
             }
           });
-          console.log(res);
 
-          if(res.data.post){  //check when no any published post on db
-            setPost(res.data.post);
+          if(res.data.post){  
+            dispatch(postSuccess(res.data.post))
             setLoading(false)
           }
           
         }catch(err){
-          toast.error("Something Went wrong", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            });
+          toast('Something went wrong!',{ position: "top-center", className: "max-w-fit" })
         }
-      }
+    }
 
-      useEffect(()=>{
-        getBlog();
-      },[])
+    useEffect(()=>{
+      getBlog();
+    },[dispatch])
 
-      if(loading){
-        return(
-          <>
-            <Appbar name="Namu" />
-            <BlogSkeleton />
-          </>
-          
-        )
-      }
+    if(loading){
+      return(
+        <>
+          <Appbar/>
+          <BlogSkeleton />
+        </>
+        
+      )
+    }
+
     return(
       <>
-        <Appbar name={"Namu"} />
         <div>
-            <BlogComponent 
-            title={post.title}
-            content={post.content}
-            authorName = {post.author.name || "Anonymous"}
-            published={"2 Feb,2024"}
-            />
+            <Appbar/>
+            <div className='flex justify-center md:justify-start'>
+              <BlogComponent />
+            </div>
+            
         </div>
       </>
     )
