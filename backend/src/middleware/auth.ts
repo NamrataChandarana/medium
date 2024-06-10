@@ -5,9 +5,9 @@ import  { verify } from 'hono/jwt'
 export const authMiddleware = createMiddleware<{Bindings: {
     JWT_SECRET: string
 },
-Variables: {
-    userId: string
-}
+    Variables: {
+        userId: string
+    }
 }>(async(c, next) => {
         try{
             const header = c.req.header("Authorization") || "";

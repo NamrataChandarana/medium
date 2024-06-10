@@ -23,6 +23,7 @@ app.use(
 )
 
 app.use("/api/v1/post/*", authMiddleware );
+app.use("/api/v1/users/profile", authMiddleware );
 app.route('/api/v1/users', userRouter);
 app.route('/api/v1/post', postRouter);
 

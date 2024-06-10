@@ -2,7 +2,6 @@ import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { createPostInput, updatePostInput} from '@namratachandarana/medium-common'
-import { tuple } from "zod";
 
 export const postRouter = new Hono<{
     Bindings: {
@@ -16,9 +15,8 @@ export const postRouter = new Hono<{
 
 
 postRouter.post('/blog', async(c) => {
-    console.log("hello")
+    
     const userId = c.get('userId');
-    console.log(userId)
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
       }).$extends(withAccelerate())
@@ -46,7 +44,8 @@ postRouter.post('/blog', async(c) => {
 
         if(post){
             return c.json({
-                message: "Post created!"
+                message: "Post created!",
+                post
             })
         }
 
@@ -118,6 +117,7 @@ postRouter.get('/bulk', async(c) => {
                 id:true,
                 title: true,
                 content: true,
+                publishedDate: true,
                 author: {
                    select:{
                         name:true
@@ -145,7 +145,6 @@ postRouter.get('/bulk', async(c) => {
 
 postRouter.get('/:id', async(c) => {
 	const id = c.req.param('id')
-	console.log(id);
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate())
@@ -160,6 +159,7 @@ postRouter.get('/:id', async(c) => {
                 id: true,
                 title: true,
                 content: true,
+                publishedDate: true,
                 author: {
                     select: {
                         name: true
@@ -178,4 +178,86 @@ postRouter.get('/:id', async(c) => {
             message: "Something went wrong"
         })
     }
+})
+
+postRouter.get('/blog/myBlogs', async(c) => {
+    const userId = c.get('userId');
+    console.log(userId)
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate())
+
+    try{
+        const posts = await prisma.post.findMany({
+            where:{
+                authorId:{
+                    equals: userId
+                }
+            },
+            select: {
+                id: true,
+                title: true,
+                content: true,
+                publishedDate: true,
+                author: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        })
+
+        if (posts && posts.length > 0) {
+            return c.json({
+                status: true,
+                message: "Your posts",
+                posts
+            });
+        } else {
+            return c.json({
+                status: true,
+                message: "No posts found",
+                posts: []
+            });
+        }
+    }catch(error){
+        return c.json({
+            status: false,
+            message: "Something went wrong!"
+        })
+    }
+})
+
+postRouter.delete('/:id', async(c) => {
+    const id = c.req.param('id');
+    console.log(id);
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate())
+
+    try{
+        const post = await prisma.post.delete({
+            where:{
+                id:id
+            }
+        })
+    
+        console.log(post);
+    
+        return c.json({
+            status: true,
+            message: "Post Deleted!"
+        })
+
+    }catch(error){
+        return c.json({
+            status: false,
+            message: "Unable to delete post"
+        })
+    }
+
+
+
+
+
 })

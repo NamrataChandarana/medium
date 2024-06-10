@@ -4,6 +4,7 @@
     "deploy": "wrangler deploy --minify src/index.ts"
   },
   "dependencies": {
+    "@cloudflare/wrangler": "^1.21.0",
     "@namratachandarana/medium-common": "^1.0.0",
     "@prisma/client": "^5.13.0",
     "@prisma/extension-accelerate": "^1.0.0",
@@ -11,13 +12,13 @@
     "hono": "^4.3.3",
     "jsonwebtoken": "^9.0.2",
     "prisma": "^5.13.0",
+    "wrangler": "^3.57.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240403.0",
     "@types/bcryptjs": "^2.4.6",
-    "typescript": "^5.4.5",
-    "wrangler": "^3.47.0"
+    "typescript": "^5.4.5"
   },
   "name": "",
   "version": ""
