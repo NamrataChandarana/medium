@@ -1,4 +1,3 @@
-import { BACKEND_URL } from "../../config";
 import axios from "axios";
 import 'react-toastify/dist/ReactToastify.css';
 import { PostType} from "../reducer/postsSlice";
