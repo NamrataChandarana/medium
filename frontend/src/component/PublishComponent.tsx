@@ -7,9 +7,14 @@ import { useDispatch } from "react-redux";
 import { postSuccess } from "../redux/reducer/postsSlice";
 import { CreatePostType } from "@namratachandarana/medium-common";
 
+interface PostType {
+    post?: {
+        title: string,
+        content: string
+    } 
+}
 
-
-const PublishComponenet =({post}: CreatePostType) => {
+const PublishComponenet =({post}: PostType ) => {
 
     const [createPost, setCreatePost] = useState<CreatePostType>({
         title: '',
@@ -47,7 +52,7 @@ const PublishComponenet =({post}: CreatePostType) => {
                     "Authorization" : localStorage.getItem("token")
                 }
             });
-            setCreatePost("");
+            setCreatePost({title: '', content: ''});
             console.log(res.data);
             
             if(res.data){

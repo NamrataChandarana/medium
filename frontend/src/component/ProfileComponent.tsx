@@ -33,7 +33,6 @@ export const ProfileComponent= ({
               Authorization: localStorage.getItem("token")
             }
           })
-          console.log(res);
           if(res.data.status == true){
             dispatch(deletePostSuccess());
             const fetchUser = async () => {
@@ -41,7 +40,7 @@ export const ProfileComponent= ({
               if (response !== null) {
                 dispatch(myPostsSuccess(response))
               } else {
-                console.log('Failed to fetch user data');
+                toast.error('Failed to fetch user data');
               }
             }
             fetchUser();

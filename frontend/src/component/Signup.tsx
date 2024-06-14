@@ -38,7 +38,11 @@ export default function SignupComponent() {
         email: postInput.email,
         password: String(postInput.password),
       })
-      setPostInput("");
+      setPostInput({
+        email: "",
+        password: "",
+        name: ""
+      });
 
       if(res.data.jwt){
         const jwt = res.data.jwt;
@@ -82,7 +86,7 @@ export default function SignupComponent() {
               type="text"
               placeholder="Your Name"
               onChange= {(e) => { setPostInput({...postInput, name: e.target.value }) }}
-              value={postInput.name}
+              value={postInput.name ?? ''}
               />
               <Input 
               id="email"

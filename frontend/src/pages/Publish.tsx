@@ -6,7 +6,7 @@ const Publish = () => {
     return(
         <>
             <Appbar />
-            <PublishComponenet />
+            <PublishComponenet/>
         </>
     )
 }

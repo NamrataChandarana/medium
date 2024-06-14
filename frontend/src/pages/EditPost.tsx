@@ -35,9 +35,14 @@ const EditPost = () => {
         getBlog()
     },[id])
 
-    const post = useSelector((state: {postData: PostState }) => state.postData.post);
-    
-    
+    const postData = useSelector((state: {postData: PostState }) => state.postData.post);
+    let post;
+    if(postData){
+      post = {
+        title : postData.title ?? '',
+        content: postData.content ?? '',
+      } 
+    }
     return(
         <>
             <Appbar />
