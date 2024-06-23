@@ -10,7 +10,6 @@ const AuthLayout = ({children}: AuthLayoutProps) => {
    const navigate = useNavigate();
    const [loader, setLoader] = useState(true)
    const authStatus = localStorage.getItem("token");
-   console.log(authStatus)
 
    useEffect(()=>{
     if(!authStatus){

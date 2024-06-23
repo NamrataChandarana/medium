@@ -13,7 +13,7 @@ app.use('/api/*', cors())
 app.use(
   '/api2/*',
   cors({
-    origin: 'http://localhost:5173',
+    origin: 'process.env.FRONTEND_URL',
     allowHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests'],
     allowMethods: ['POST', 'GET', 'OPTIONS'],
     exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],

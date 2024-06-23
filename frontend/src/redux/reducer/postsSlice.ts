@@ -43,7 +43,6 @@ const postsSlice = createSlice({
         postSuccess: (state, action: PayloadAction<PostType>) =>{
             state.status = true
             state.post = action.payload
-            console.log(state.post)
         }
      }
 })

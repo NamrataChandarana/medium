@@ -50,7 +50,6 @@ postRouter.post('/blog', async(c) => {
         }
 
       }catch(e){
-        console.log(e);
         return c.json({
             message: "Something went wrong"
         })
@@ -86,7 +85,7 @@ postRouter.put('/blog',async(c) => {
             },
 
         })
-        console.log(post)
+
 
         return c.json({
             message: "Post updated!",
@@ -108,7 +107,6 @@ postRouter.get('/bulk', async(c) => {
     }).$extends(withAccelerate())
 
     try{
-        console.log("hello");
         const posts = await prisma.post.findMany({
             // where:{
             //     published: true
@@ -125,8 +123,6 @@ postRouter.get('/bulk', async(c) => {
                 }
             }
         });
-        console.log(posts);
-        
 
         if(posts){
             return c.json({
@@ -182,7 +178,7 @@ postRouter.get('/:id', async(c) => {
 
 postRouter.get('/blog/myBlogs', async(c) => {
     const userId = c.get('userId');
-    console.log(userId)
+
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate())
@@ -230,7 +226,7 @@ postRouter.get('/blog/myBlogs', async(c) => {
 
 postRouter.delete('/:id', async(c) => {
     const id = c.req.param('id');
-    console.log(id);
+
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate())
@@ -241,8 +237,6 @@ postRouter.delete('/:id', async(c) => {
                 id:id
             }
         })
-    
-        console.log(post);
     
         return c.json({
             status: true,

@@ -96,7 +96,6 @@ userRouter.post('/signin',  async(c) => {
             where: {
             email: email
           }});
-          console.log(user);
     
           if(!user){
             return c.json({

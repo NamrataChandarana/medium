@@ -53,7 +53,6 @@ const PublishComponenet =({post}: PostType ) => {
                 }
             });
             setCreatePost({title: '', content: ''});
-            console.log(res.data);
             
             if(res.data){
                 const id = res.data.post.id;
@@ -82,7 +81,6 @@ const PublishComponenet =({post}: PostType ) => {
                 title: "",
                 content: ""
             })
-            console.log(res);
             if(res.data){
                 dispatch(postSuccess(res.data));
                 toast.success( res.data.message, {position: "top-center"});
@@ -90,7 +88,7 @@ const PublishComponenet =({post}: PostType ) => {
 
             }
         }catch(err){
-            console.log(err);
+            toast.error( "something went wrong", {position: "top-center"});
         }
     }
 

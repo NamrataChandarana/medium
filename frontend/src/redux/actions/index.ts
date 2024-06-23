@@ -13,7 +13,6 @@ export const getUser = async(): Promise<User> => {
       if(res){
         const response: User = res.data.user;
         return response;
-        console.log(response)
       }else{
         throw new Error("Something went wrong!")
       }
@@ -21,7 +20,6 @@ export const getUser = async(): Promise<User> => {
       // dispatch(loadUser(res.data.user));
       
     }catch(error){
-      console.log(error)
       throw new Error("Something went wrong!")
     }
   }
@@ -46,7 +44,6 @@ export const myPosts = async(): Promise<PostType[]> => {
     }
 
   }catch(error){
-    console.log(error)
     throw new Error("Something went wrong!")
   }
 }
