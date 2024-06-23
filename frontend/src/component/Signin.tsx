@@ -42,6 +42,8 @@ export default function SigninComponent() {
         dispatch(signin(res.data))
         toast.success('Signin Successfully!',{ position: "top-center", className: "max-w-fit" })
         navigate('/blog');
+      }else{
+        toast.error(res.data.message,{ position: "top-center", className: "max-w-fit" })
       }
     }catch(err){
       toast.error("Incorrect Email Password",{ position: "top-center", className: "max-w-fit" })
